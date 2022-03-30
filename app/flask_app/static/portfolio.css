@@ -132,7 +132,7 @@ body {
 
 }
 .right .sub-title {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   color: #00008b;
 }
 .right .half {
@@ -183,30 +183,7 @@ body {
   font-weight: bold;
   color: #808080;
 }
-.right .stock-logo.apple:before {
-  background: #808080;
-}
-.right .stock-logo.facebook:before {
-  background: #3b5998;
-}
-.right .stock-logo.amazon:before {
-  background: #ff9b24;
-}
-.right .stock-logo.twitter:before {
-  background: #55acee;
-}
-.right .stock-logo.paypal:before {
-  background: #003087;
-}
-.right .stock-logo.google:before {
-  background: #d62d20;
-}
-.right .stock-logo.paperpillar:before {
-  background: linear-gradient(to top right, #7871ff, #6feaff);
-}
-.right .stock-logo.dandruft:before {
-  background: linear-gradient(to top right, #f88781, #f7c682);
-}
+
 
 a {
   color: inherit; /* blue colors for links too */

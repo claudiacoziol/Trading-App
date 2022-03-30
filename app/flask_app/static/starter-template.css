@@ -3,7 +3,7 @@
 }
 body {
   height: 100vh;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Open Sans", sans-serif;
   background: linear-gradient(to top right, #7c89d5, #f599a5);
   font-size: 15px;
 }
@@ -86,9 +86,10 @@ body {
 }
 .btn-primary {
     color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
+    background-color: #3ca9e2;
+    border-color: #3ca9e2;
 
 }
+
 
 

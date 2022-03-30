@@ -1,0 +1,5 @@
+flask
+flask_marshmallow
+flask_sqlalchemy
+flask_migrate
+psycopg2

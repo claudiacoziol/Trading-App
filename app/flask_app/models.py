@@ -10,10 +10,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(80))
 
     def __init__(self, username, email, password):
-        hashed_password = generate_password_hash(password, method='sha256')
+        hashed_password = generate_password_hash(password, method="sha256")
         self.username, self.email, self.password = username, email, hashed_password
 
 
 # db.create_all()
 # db.session.commit()
-
