@@ -48,7 +48,7 @@ Dashboard
         </div>
         <div class="right">
             <div class="title">Dashboard</div>
-            <div class="description">Hello, user!</div>
+            <div class="description">Hello, {{ current_user.username }}!</div>
             <div class="row">
                 <div class="graph">
                     <svg viewBox="0 0 250 60" width="250" height="90">
@@ -110,15 +110,25 @@ Dashboard
             <div class="row">
                 <div class="half">
                     <div class="sub-title">All Assets</div>
-                    {% for asset in assets %}
-                    <div class="stock">
-                        <div class="stock-logo apple"><i class="fa fa-inverse fa-apple"></i></div>
-                        <div class="stock-info">
-                            <div class="stock-name">{{ asset['abbr'] }}</div>
-                            <div class="stock-fullname">{{ asset['name'] }}.</div>
+                    {% if assets|length > 0 %}
+                        {% for asset in assets %}
+                        <div class="stock">
+                            <div class="stock-logo apple"><i class="fa fa-inverse fa-apple"></i></div>
+                            <div class="stock-info">
+                                <div class="stock-name">{{ asset['abbr'] }}</div>
+                                <div class="stock-fullname">{{ asset['name'] }}</div>
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% elif is_error is False %}
+                        <div class ="stock">
+                            <div class="stock-info">User has no assets!</div>
+                        </div>
+                    {% else %}
+                        <div class ="stock">
+                            <div class="stock-info">Currently not available</div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -20,15 +20,19 @@ class LoginForm(FlaskForm):
 
 class RegisterForm(FlaskForm):
     email = StringField(
-        "email",
+        "Email",
         validators=[InputRequired(), Email(message="Invalid email"), Length(max=50)],
-        render_kw={"placeholder": "email"},
+        render_kw={"placeholder": "Email"},
     )
     username = StringField(
-        "username",
+        "Username",
         validators=[InputRequired(), Length(min=4, max=15)],
-        render_kw={"placeholder": "username"},
+        render_kw={"placeholder": "Username"},
     )
     password = PasswordField(
-        "password", validators=[InputRequired(), Length(min=8, max=80)]
+        "Password",
+        validators=[InputRequired(), Length(min=8, max=80)],
+        render_kw={"placeholder": "Password"},
     )
+
+    submit = SubmitField("Sign up")

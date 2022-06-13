@@ -1,6 +1,6 @@
+from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
 from . import db
-from werkzeug.security import generate_password_hash
 
 
 class User(UserMixin, db.Model):
@@ -12,7 +12,3 @@ class User(UserMixin, db.Model):
     def __init__(self, username, email, password):
         hashed_password = generate_password_hash(password, method="sha256")
         self.username, self.email, self.password = username, email, hashed_password
-
-
-# db.create_all()
-# db.session.commit()

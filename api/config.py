@@ -1,5 +1,8 @@
+from decouple import config
+
+
 class Config:
     DEBUG = True
     CSRF_ENABLED = True
-    SECRET_KEY = "example"
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:admin95@localhost:5432/Assets_app"
+    SECRET_KEY = config('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = config('SQLALCHEMY_DATABASE_URI')

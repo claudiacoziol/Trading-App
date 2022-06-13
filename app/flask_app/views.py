@@ -7,7 +7,6 @@ from .forms import LoginForm, RegisterForm
 
 import requests
 import jwt
-from decouple import config
 
 index_blueprint = Blueprint("index", __name__)
 session_blueprint = Blueprint("session", __name__)
@@ -20,9 +19,14 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@index_blueprint.route("/")
+@index_blueprint.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")
+
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect(url_for("session.login"))
 
 
 @session_blueprint.route("/login", methods=["GET", "POST"])
@@ -31,8 +35,11 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        print(form.username.data)
+        print(user)
         if user:
             if check_password_hash(user.password, form.password.data):
+                print('checked')
                 login_user(user, remember=form.remember.data)
                 return redirect(url_for("functionality.dashboard"))
 
@@ -73,38 +80,55 @@ def logout():
 @functionality_blueprint.route("/dashboard")
 @login_required
 def dashboard():
-    # pobierz z api wszystkie dostepne assety - request
     jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
-    print(type(jwt_token))
     try:
         resp = requests.get(
-            "http://192.168.0.103:5001/all_assets",
+            "http://127.0.0.1:5000/all_assets",
             headers={"X-Access-Token": jwt_token},
             timeout=5,
         )
-        print(jwt_token)
+    except requests.exceptions.ConnectionError:
+        return render_template(
+            "dashboard.html", name=current_user.username, assets=[], is_error=True
+        )
+
+    if resp.status_code != 200:
+        return render_template(
+            "dashboard.html", name=current_user.username, assets=[], is_error=True
+        )
+
+    payload = resp.json()
+    assets = []  # [{'name': 'Apple', 'abbr': 'A'}, {'}]
+    for asset in payload:
+        abbr = asset["abbreviation"]
+        name = asset["name"]
+        assets.append({"abbr": abbr, "name": name})
+
+    return render_template(
+        "dashboard.html", name=current_user.username, assets=assets, is_error=False
+    )
+
+
+@menu_blueprint.route("/portfolio")
+@login_required
+def portfolio():
+    jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
+    try:
+        resp = requests.get(
+            f"http://127.0.0.1:5000/assets/{current_user.username}",
+            headers={"X-Access-Token": jwt_token},
+            timeout=5,
+        )
     except requests.exceptions.ConnectionError:
         assets = ["Currently not available"]
     else:
         if resp.status_code != 200:
             assets = ["Currently not available"]
         else:
-            payload = resp.json()
+            assets = resp.json()["available_assets"]
             print(resp.status_code)
 
-            assets = []  # [{'name': 'Apple', 'abbr': 'A'}, {'}]
-            for asset in payload:
-                abbr = asset["abbreviation"]
-                name = asset["name"]
-                assets.append({"abbr": abbr, "name": name})
-
-    return render_template("dashboard.html", name=current_user.username, assets=assets)
-
-
-@menu_blueprint.route("/portfolio")
-@login_required
-def portfolio():
-    return render_template("portfolio.html")
+    return render_template("portfolio.html", assets=assets)
 
 
 @menu_blueprint.route("/account")

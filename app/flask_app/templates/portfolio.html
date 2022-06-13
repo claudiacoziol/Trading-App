@@ -36,7 +36,7 @@ My portfolio
             </div>
             <div class="navigation">
                 <ul style="padding-left:22px">
-                    <a href="{{url_for('menu.portfolio')}}">
+                    <a href="{{url_for('functionality.dashboard')}}">
                         <li><i class="material-icons">dashboard</i><span>Dashboard</span></li>
                     </a>
                     <li><i class="material-icons">account_box</i><span>Account</span></li>
@@ -48,10 +48,21 @@ My portfolio
         </div>
         <div class="right">
             <div class="title">My portfolio</div>
-            <div class="description">User, you have x assets</div>
+            <div class="description">User, you have {{ assets | length }} assets</div>
             <div class="row">
                 <div class="half">
                     <div class="sub-title">My Assets</div>
+                    {% if assets|length > 0 %}
+                        {% for asset in assets %}
+                        <div class="stock">
+                            <div class="stock-logo apple"><i class="fa fa-inverse fa-apple"></i></div>
+                            <div class="stock-info">
+                               <a href="/details/{{ asset }}"><div class="stock-fullname">{{ asset }}</div></a>
+                                <!-- asset price - dodac sockety -->
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

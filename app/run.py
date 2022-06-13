@@ -1,6 +1,7 @@
 import os
 
 from flask_app import create_app, db
+from flask_app.models import User
 
 if __name__ == "__main__":
     app = create_app()
@@ -10,4 +11,4 @@ if __name__ == "__main__":
             db.create_all()
 
     app.debug = True
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5001)
