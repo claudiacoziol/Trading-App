@@ -1,9 +1,9 @@
 import sqlalchemy
 from flask import Blueprint, request
 
-from . import db
-from .models import Assets, AssetSchema, AssetPriceHistorySchema, AssetsUsers, AssetsPriceHistory
-from .decorators import token_required
+from __init__ import db
+from models import Assets, AssetSchema, AssetPriceHistorySchema, AssetsUsers, AssetsPriceHistory
+from decorators import token_required
 
 add_asset_blueprint = Blueprint("add_asset", __name__)
 add_user_to_asset_blueprint = Blueprint("add_user_to_asset", __name__)
@@ -12,6 +12,7 @@ get_assets_by_username_blueprint = Blueprint("get_assets_by_username", __name__)
 get_assets_blueprint = Blueprint("get_assets", __name__)
 get_asset_blueprint = Blueprint("get_asset", __name__)
 get_asset_history_blueprint = Blueprint("get_asset_history", __name__)
+get_asset_current_value_blueprint = Blueprint("get_asset_current_value", __name__)
 delete_asset_blueprint = Blueprint("delete_asset", __name__)
 
 asset_schema = AssetSchema()
@@ -119,6 +120,17 @@ def asset_history(abbr):
 
     return asset_price_history_schema.jsonify(history_records)
 
+@get_asset_current_value_blueprint.route("/asset/<string:abbr>/value")
+# @token_required
+def asset_current_value(abbr):
+
+    def jsonify_data():
+        while True:
+            found_asset_id = Assets.query.filter_by(abbreviation=abbr).first()._id
+            current_value = AssetsPriceHistory.query.filter_by(asset_id=found_asset_id).first()
+            yield current_value
+
+    return {"current_value": jsonify_data()}
 
 @delete_asset_blueprint.route("/asset/<int:id>", methods=["DELETE"])
 # @token_required
@@ -127,7 +139,6 @@ def delete_asset(id: int) -> str:
     delete_from_db(asset_to_delete)
 
     return asset_schema.jsonify(asset_to_delete)
-
 
 
 # endpoint - return - actual value

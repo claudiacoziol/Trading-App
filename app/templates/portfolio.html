@@ -4,6 +4,27 @@
 My portfolio
 {% endblock %}
 
+{% block script %}
+<script>
+    {% if assets|length > 0 %}
+        {% for asset in assets %}
+              const source = new EventSource("http://api:5001/asset/{{ asset }}/value");
+              source.onmessage = function (event) {
+                    const div = document.getElementById("asset-price-{{ asset }}");
+
+                    const data = JSON.parse(event.data);
+                    current_value = data["current_value"];
+
+                    div.textContent = current_value;
+              }
+        {% endfor %}
+    {% endif %}
+
+
+</script>
+{% endblock %}
+
+
 {% block styles %}
 <link rel="stylesheet" href="{{url_for('static', filename='portfolio.css')}}">
 {% endblock %}
@@ -37,12 +58,15 @@ My portfolio
             <div class="navigation">
                 <ul style="padding-left:22px">
                     <a href="{{url_for('functionality.dashboard')}}">
-                        <li><i class="material-icons">dashboard</i><span>Dashboard</span></li>
+                        <li><i class="material-icons">dashboard</i><span>Dashboard</span></i></li>
                     </a>
-                    <li><i class="material-icons">account_box</i><span>Account</span></li>
-                    <li><i class="material-icons">logout</i><span>Log out</span></li>
+                    <a href="{{url_for('menu.account')}}">
+                        <li><i class="material-icons">account_box</i><span>Account</span></i></li>
+                    </a>
+                    <a href="{{url_for('index.index')}}">
+                        <li><i class="material-icons">logout</i><span>Log out</span></i></li>
+                    </a>
                     <li></li>
-
                 </ul>
             </div>
         </div>
@@ -53,15 +77,17 @@ My portfolio
                 <div class="half">
                     <div class="sub-title">My Assets</div>
                     {% if assets|length > 0 %}
-                        {% for asset in assets %}
-                        <div class="stock">
-                            <div class="stock-logo apple"><i class="fa fa-inverse fa-apple"></i></div>
-                            <div class="stock-info">
-                               <a href="/details/{{ asset }}"><div class="stock-fullname">{{ asset }}</div></a>
-                                <!-- asset price - dodac sockety -->
-                            </div>
+                    {% for asset in assets %}
+                    <div class="stock">
+                        <div class="stock-logo apple"><i class="fa fa-inverse fa-apple"></i></div>
+                        <div class="stock-info">
+                            <a href="/details/{{ asset }}">
+                                <div class="stock-fullname">{{ asset }}</div>
+                            </a>
+                            <div id="asset-price-{{ asset }}"></div>
                         </div>
-                        {% endfor %}
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
             </div>

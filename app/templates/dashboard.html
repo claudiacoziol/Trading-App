@@ -8,6 +8,7 @@ Dashboard
 <link rel="stylesheet" href="{{url_for('static', filename='dashboard.css')}}">
 {% endblock %}
 
+
 {% block content %}
 
 <div class="container">
@@ -37,12 +38,12 @@ Dashboard
             <div class="navigation">
                 <ul style="padding-left:22px">
                     <a href="{{url_for('menu.portfolio')}}">
-                        <li><i class="material-icons">loyalty</i><span>Portfolio</span></li>
-                    </a>
-                    <li><i class="material-icons">account_box</i><span>Account</span></li>
-                    <li><i class="material-icons">logout</i><span>Log out</span></li>
+                        <li><i class="material-icons">loyalty</i><span>Portfolio</span></i></li></a>
+                    <a href="{{url_for('menu.account')}}">
+                        <li><i class="material-icons">account_box</i><span>Account</span></i></li></a>
+                     <a href="{{url_for('index.index')}}">
+                        <li><i class="material-icons">logout</i><span>Log out</span></i></li></a>
                     <li></li>
-
                 </ul>
             </div>
         </div>
@@ -120,7 +121,7 @@ Dashboard
                             </div>
                         </div>
                         {% endfor %}
-                    {% elif is_error is False %}
+                    {% elif is_error == false %}
                         <div class ="stock">
                             <div class="stock-info">User has no assets!</div>
                         </div>
@@ -133,4 +134,5 @@ Dashboard
             </div>
         </div>
 
-        {% endblock %}
+{% endblock %}
+

@@ -6,3 +6,8 @@ datetime
 wtforms
 flask_wtf
 email_validator
+flask_migrate
+python_decouple
+requests
+jwt
+psycopg2

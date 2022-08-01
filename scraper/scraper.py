@@ -1,7 +1,9 @@
-import requests
+import time
 
+import requests
 from bs4 import BeautifulSoup
 
+from Parameters import Parameters
 
 class PriceTracker:
     def __init__(self):
@@ -47,7 +49,7 @@ class PriceTracker:
 
 
 def main():
-    resp = requests.get('http://localhost:5000/all_assets')
+    resp = requests.get('http://api:5001/all_assets')
     asset_abbrs = resp.json()
 
     tracker = PriceTracker()
@@ -57,10 +59,11 @@ def main():
         current_state.update({asset_abbr['abbreviation']: price})
 
     for abbr, price in current_state.items():
-        requests.post(f'http://localhost:5000/asset/{abbr}?new_price={price}')
-
-
+        requests.post(f'http://api:5001/asset/{abbr}?new_price={price}')
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        if int(time.time()) % Parameters.INTERVAL_IN_SECONDS == 0:
+            main()
+            time.sleep(1)

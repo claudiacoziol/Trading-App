@@ -41,10 +41,10 @@ def login():
             if check_password_hash(user.password, form.password.data):
                 print('checked')
                 login_user(user, remember=form.remember.data)
+                flash("You have been successfully logged in.", category="success")
                 return redirect(url_for("functionality.dashboard"))
 
-        # return '<h1>Invalid username or password</h1>'
-        flash("Invalid username or password", category="warning")
+        flash("Invalid username or password.", category="warning")
 
     return render_template("login.html", form=form)
 
@@ -61,10 +61,8 @@ def signup():
         )
         db.session.add(new_user)
         db.session.commit()
-        # flash("Your account has been successfully created.", category="success")
+        flash("Your account has been successfully created.", category="success")
         return redirect(url_for("session.login"))
-
-        # return '<h1>New user has been created!</h1>'
 
     return render_template("signup.html", form=form)
 
@@ -80,7 +78,7 @@ def logout():
 @functionality_blueprint.route("/dashboard")
 @login_required
 def dashboard():
-    jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
+    # jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
     try:
         resp = requests.get(
             "http://127.0.0.1:5000/all_assets",

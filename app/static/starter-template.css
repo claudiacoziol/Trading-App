@@ -20,12 +20,27 @@ body {
   display: flex;
 }
 
+.logo {
+  margin-bottom: 20px;
+}
 
 h2 {
-  font-weight: 300;
+  font-weight: bold;
+  font-size: 22px;
+  font-family: 'Roboto', sans-serif;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  color: #333;
 }
+
+h3 {
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: normal;
+  color: #848697;
+  margin-bottom: 40px;
+}
+
 
 
 #index-form-wrap {
@@ -99,5 +114,8 @@ input {
 }
 
 
-
-
+.alert-error {
+  border-color: darkred;
+  background: red;
+  color: white;
+}

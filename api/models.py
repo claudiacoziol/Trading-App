@@ -2,7 +2,7 @@ from __future__ import annotations
 from flask_marshmallow import fields
 import datetime
 
-from . import db, ma
+from __init__ import db, ma
 
 '''
 AssetsHistory
@@ -12,6 +12,7 @@ asset_id (FK) timestamp curr_price
 
 class AssetsPriceHistory(db.Model):
     __tablename__ = "AssetsPriceHistory"
+    __table_args__ = {'extend_existing': True}
 
     _id = db.Column(db.Integer, primary_key=True)
     current_price = db.Column(db.Float)

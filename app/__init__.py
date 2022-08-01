@@ -3,18 +3,24 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from hashlib import md5
 from datetime import timedelta
-from config import Config
+from flask_migrate import Migrate
+from decouple import config
 
 db = SQLAlchemy()
 
 login_manager = LoginManager()
+migrate = Migrate()
 
 
 def create_app():
     app = Flask(__name__)
 
-    app.config.from_object(Config)
+    app.DEBUG = True
+    app.CSRF_ENABLED = True
+    app.SECRET_KEY = config("SECRET_KEY")
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@app_db:5432/users_db"
 
+    migrate.init_app(app=app, db=db)
     encryptor = md5()
 
     login_manager.init_app(app)

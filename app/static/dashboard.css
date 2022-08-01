@@ -10,7 +10,7 @@ body {
 .center {
   position: absolute;
   display: block;
-  top: 50%;
+  top: 50.6%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80vw;
@@ -18,16 +18,7 @@ body {
   max-width: 800px;
   display: flex;
 }
-.inspiration {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  font-family: 'Gill Sans', sans-serif;
-  color: #fff;
-}
+
 .left {
   flex: 0 0 150px;
   width: 150px;
@@ -212,3 +203,4 @@ a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
 }
+
