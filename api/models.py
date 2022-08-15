@@ -27,6 +27,7 @@ class AssetsPriceHistory(db.Model):
 
 class Assets(db.Model):
     __tablename__ = "Assets"
+    __table_args__ = {'extend_existing': True}
 
     _id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(length=50), nullable=False, unique=True)
@@ -44,6 +45,7 @@ class Assets(db.Model):
 
 class AssetsUsers(db.Model):
     __tablename__ = "AssetsUsers"
+    __table_args__ = {'extend_existing': True}
 
     _id = db.Column(db.Integer, primary_key=True)
     asset_name = db.Column(db.String(length=50), db.ForeignKey("Assets.name"))

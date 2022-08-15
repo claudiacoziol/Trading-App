@@ -81,8 +81,8 @@ def dashboard():
     # jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
     try:
         resp = requests.get(
-            "http://127.0.0.1:5000/all_assets",
-            headers={"X-Access-Token": jwt_token},
+            "http://api:5001/all_assets",
+            # headers={"X-Access-Token": jwt_token},
             timeout=5,
         )
     except requests.exceptions.ConnectionError:
@@ -110,11 +110,11 @@ def dashboard():
 @menu_blueprint.route("/portfolio")
 @login_required
 def portfolio():
-    jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
+    # jwt_token = jwt.encode({}, "haslo123", algorithm="HS256")
     try:
         resp = requests.get(
-            f"http://127.0.0.1:5000/assets/{current_user.username}",
-            headers={"X-Access-Token": jwt_token},
+            f"http://api:5001/assets/{current_user.username}",
+            # headers={"X-Access-Token": jwt_token},
             timeout=5,
         )
     except requests.exceptions.ConnectionError:
@@ -127,6 +127,11 @@ def portfolio():
             print(resp.status_code)
 
     return render_template("portfolio.html", assets=assets)
+
+@menu_blueprint.route("/new_asset")
+@login_required
+def new_asset():
+    return render_template("new_asset.html")
 
 
 @menu_blueprint.route("/account")
