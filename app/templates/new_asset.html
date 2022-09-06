@@ -51,17 +51,17 @@ My portfolio
             </div>
         </div>
         <div class="right">
-            <div class="title">My portfolio</div>
-            <div class="description">User, you have {{ assets | length }} assets</div>
+            <div class="title">New Assets</div>
             <div class="row">
                 <div class="half">
-                    <div class="sub-title">My Assets</div>
-                    <form> 
-                        <select>
-                            <option value="TSLA"></option>
-                            <option value="META"></option>
+                    <div class="sub-title">New Assets</div>
+                    <form action="#" method="POST" > 
+                        <select name="asset_choice">
+                            {% for dict in assets %}
+                            <option value="{{ dict['name'] }}">{{ dict['abbr'] }}</option> 
+                            {% endfor %}
                         </select>
-
+                        <input type="submit"/>
                     </form>
 
                 </div>

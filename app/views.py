@@ -1,12 +1,13 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+import jwt
+import requests
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash
-from flask_login import login_user, login_required, logout_user, current_user
-from .models import User
+
 from . import db, login_manager
 from .forms import LoginForm, RegisterForm
-
-import requests
-import jwt
+from .models import User
+from .utils import add_new_asset
 
 index_blueprint = Blueprint("index", __name__)
 session_blueprint = Blueprint("session", __name__)
@@ -19,7 +20,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@index_blueprint.route("/", methods=["GET", "POST"])
+@index_blueprint.route("/")
 def index():
     return render_template("index.html")
 
@@ -35,11 +36,8 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        print(form.username.data)
-        print(user)
         if user:
             if check_password_hash(user.password, form.password.data):
-                print('checked')
                 login_user(user, remember=form.remember.data)
                 flash("You have been successfully logged in.", category="success")
                 return redirect(url_for("functionality.dashboard"))
@@ -71,7 +69,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    flash("You have been successfully log out.", category="success")
+    flash("You have been successfully logged out.", category="success")
     return redirect(url_for("index.index"))
 
 
@@ -96,7 +94,7 @@ def dashboard():
         )
 
     payload = resp.json()
-    assets = []  # [{'name': 'Apple', 'abbr': 'A'}, {'}]
+    assets = []  # got pattern: [{'name': 'Apple', 'abbr': 'A'}, {'}]
     for asset in payload:
         abbr = asset["abbreviation"]
         name = asset["name"]
@@ -124,15 +122,30 @@ def portfolio():
             assets = ["Currently not available"]
         else:
             assets = resp.json()["available_assets"]
-            print(resp.status_code)
 
     return render_template("portfolio.html", assets=assets)
 
-@menu_blueprint.route("/new_asset")
+
+@menu_blueprint.route("/new_asset", methods=["GET", "POST"])
 @login_required
 def new_asset():
-    return render_template("new_asset.html")
+    if request.method == "GET":
+        try:
+            resp = requests.get(
+                "http://api:5001/all_assets",
+                # headers={"X-Access-Token": jwt_token},
+                timeout=5,
+            )
+        except requests.exceptions.ConnectionError:
+            return render_template("new_asset.html", assets=[], is_error=True)
 
+        if resp.status_code != 200:
+            return render_template("new_asset.html", assets=[], is_error=True)
+
+        assets = prepare_assets(resp)
+        return render_template("new_asset.html", assets=assets, is_error=False)
+    elif request.method == "POST":
+        return add_new_asset()
 
 @menu_blueprint.route("/account")
 @login_required

@@ -5,6 +5,7 @@ from hashlib import md5
 from datetime import timedelta
 from flask_migrate import Migrate
 from decouple import config
+from .config import Config
 
 db = SQLAlchemy()
 
@@ -15,16 +16,13 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
 
-    app.DEBUG = True
-    app.CSRF_ENABLED = True
-    app.SECRET_KEY = config("SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@app_db:5432/users_db"
-
     migrate.init_app(app=app, db=db)
     encryptor = md5()
 
     login_manager.init_app(app)
     login_manager.login_view = "login"
+
+    app.config.from_object(Config)
 
     app.permanent_session_lifetime = timedelta(minutes=60)
     app.secret_key = encryptor.digest()
