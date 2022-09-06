@@ -16,13 +16,13 @@ import requests
 #     },
 # )
 
-requests.post(
-    "http://localhost:5001/asset",
-    json={
-        "name": "Meta Platforms, Inc.",
-        "abbreviation": "FB",
-    },
-)
+# requests.post(
+#     "http://localhost:5001/asset",
+#     json={
+#         "name": "Meta Platforms, Inc.",
+#         "abbreviation": "META",
+#     },
+# )
 
 # requests.post(
 #     "http://localhost:5001/asset",
